@@ -355,12 +355,7 @@ make install
 echo "*** Building libvidstab ***"
 cd $BUILD_DIR/vid.stab-*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
-if [ "$platform" = "linux" ]; then
-  sed -i "s/vidstab SHARED/vidstab STATIC/" ./CMakeLists.txt
-elif [ "$platform" = "darwin" ]; then
-  sed -i "" "s/vidstab SHARED/vidstab STATIC/" ./CMakeLists.txt
-fi
-PATH="$BIN_DIR:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR"
+PATH="$BIN_DIR:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR" -DBUILD_SHARED_LIBS:bool=off
 make -j $jval
 make install
 
