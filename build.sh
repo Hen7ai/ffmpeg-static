@@ -452,16 +452,19 @@ if [ "$platform" = "linux" ]; then
     --extra-libs="-lpthread -lm -lz -ldl" \
     --extra-ldexeflags="-static" \
     --bindir="$BIN_DIR" \
-    --enable-pic \
-    --enable-ffplay \
-    --enable-fontconfig \
-    --enable-frei0r \
     --enable-gpl \
     --enable-version3 \
+    --disable-debug \
+    --disable-ffplay \
+    --enable-avisynth \
+    --enable-filter=drawtext \
+    --enable-fontconfig \
+    --enable-frei0r \
+    --enable-gray \
     --enable-libaom \
     --enable-libass \
-    --enable-libfribidi \
     --enable-libfdk-aac \
+    --enable-libfribidi \
     --enable-libfreetype \
     --enable-libmp3lame \
     --enable-libopencore-amrnb \
@@ -471,7 +474,7 @@ if [ "$platform" = "linux" ]; then
     --enable-librtmp \
     --enable-libsoxr \
     --enable-libspeex \
-	--enable-libsrt \
+    --enable-libsrt \
     --enable-libtheora \
     --enable-libvidstab \
     --enable-libvo-amrwbenc \
@@ -483,7 +486,9 @@ if [ "$platform" = "linux" ]; then
     --enable-libxvid \
     --enable-libzimg \
     --enable-nonfree \
-    --enable-openssl
+    --enable-openssl \
+    --enable-pic \
+    --enable-swresample
 elif [ "$platform" = "darwin" ]; then
   [ ! -f config.status ] && PATH="$BIN_DIR:$PATH" \
   PKG_CONFIG_PATH="${TARGET_DIR}/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/local/Cellar/openssl/1.0.2o_1/lib/pkgconfig" ./configure \
