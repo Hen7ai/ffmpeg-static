@@ -383,7 +383,7 @@ echo "*** Building libwebp ***"
 cd $BUILD_DIR/libwebp*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
 ./autogen.sh
-./configure --prefix=$TARGET_DIR --disable-shared
+./configure --prefix=$TARGET_DIR --disable-shared --enable-libwebpmux
 make -j $jval
 make install
 
