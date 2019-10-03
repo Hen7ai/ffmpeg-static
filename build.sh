@@ -115,6 +115,12 @@ download \
   "https://bitbucket.org/multicoreware/x265/downloads/"
 
 download \
+  "v1.4.0.tar.gz" \
+  "srt-v1.4.0.tar.gz" \
+  "f4a578206288cd7a2237938f3fcb8305" \
+  "https://github.com/Haivision/srt/archive/"
+
+download \
   "v2.0.0.tar.gz" \
   "fdk-aac.tar.gz" \
   "0d7c8d530a37fafa681b795b8a60c176" \
@@ -274,6 +280,17 @@ cd build/linux
 [ $rebuild -eq 1 ] && find . -mindepth 1 ! -name 'make-Makefiles.bash' -and ! -name 'multilib.sh' -exec rm -r {} +
 PATH="$BIN_DIR:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR" -DENABLE_SHARED:BOOL=OFF -DSTATIC_LINK_CRT:BOOL=ON -DENABLE_CLI:BOOL=OFF -DHIGH_BIT_DEPTH:bool=on ../../source
 sed -i 's/-lgcc_s/-lgcc_eh/g' x265.pc
+make -j $jval
+make install
+
+echo "*** Building srt ***"
+cd $BUILD_DIR/srt*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+PKG_CONFIG_PATH="$TARGET_DIR/lib/pkgconfig" ./configure --prefix="$TARGET_DIR" --disable-shared
+if [ ! -f modified ]; then
+  sed -i "/target_link_libraries/{s/target_link_libraries\(.*\))/target_link_libraries\1 \$\{CMAKE_DL_LIBS\})/}" CMakeLists.txt # Fix for "undefined reference to dlopen"
+  touch modified
+fi
 make -j $jval
 make install
 
@@ -439,6 +456,7 @@ if [ "$platform" = "linux" ]; then
     --enable-librtmp \
     --enable-libsoxr \
     --enable-libspeex \
+	--enable-libsrt \
     --enable-libtheora \
     --enable-libvidstab \
     --enable-libvo-amrwbenc \
