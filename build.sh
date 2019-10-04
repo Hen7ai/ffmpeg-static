@@ -251,7 +251,7 @@ cd $BUILD_DIR/openssl*
 if [ "$platform" = "darwin" ]; then
   PATH="$BIN_DIR:$PATH" ./Configure darwin64-x86_64-cc --prefix=$TARGET_DIR
 elif [ "$platform" = "linux" ]; then
-  PATH="$BIN_DIR:$PATH" ./config --prefix=$TARGET_DIR
+  PATH="$BIN_DIR:$PATH" ./config shared --prefix=$TARGET_DIR
 fi
 PATH="$BIN_DIR:$PATH" make -j $jval
 make install
@@ -293,10 +293,6 @@ echo "*** Building srt ***"
 cd $BUILD_DIR/srt*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
 PKG_CONFIG_PATH="$TARGET_DIR/lib/pkgconfig" ./configure --prefix="$TARGET_DIR" --disable-shared
-if [ ! -f modified ]; then
-  sed -i "/target_link_libraries/{s/target_link_libraries\(.*\))/target_link_libraries\1 \$\{CMAKE_DL_LIBS\})/}" CMakeLists.txt # Fix for "undefined reference to dlopen"
-  touch modified
-fi
 make -j $jval
 make install
 
