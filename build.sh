@@ -281,19 +281,11 @@ make install
 
 echo "*** Building aom ***"
 cd $BUILD_DIR
-if [ ! -d aom ]; then
-  git clone https://aomedia.googlesource.com/aom
-  mkdir -p aom/build
-  cd aom/build
-else
-  cd aom
-  git fetch --all
-  git reset --hard origin/master
-  cd build
-fi
+git -C aom pull 2> /dev/null || git clone --depth 1 https://aomedia.googlesource.com/aom
+mkdir -p aom/aom_build
+cd aom/aom_build
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
-PATH="$BIN_DIR:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR" ..
-sed -i -E "/target_link_libraries/{s/target_link_libraries(.*)\)/target_link_libraries\1 \$\{CMAKE_DL_LIBS\}\)/}" ../CMakeLists.txt # Fix for "undefined reference to dlopen"
+PATH="$BIN_DIR:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR" -DENABLE_SHARED=off -DENABLE_NASM=on ..
 make -j $jval
 make install
 
