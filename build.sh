@@ -128,6 +128,30 @@ download \
 
 # libass dependency
 download \
+  "v1.6.1.tar.gz" \
+  "frei0r-v1.6.1.tar.gz" \
+  "nil" \
+  "https://github.com/dyne/frei0r/archive/"
+
+download \
+  "gperf-3.1.tar.gz" \
+  "" \
+  "nil" \
+  "http://ftp.gnu.org/pub/gnu/gperf/"
+
+download \
+  "freetype-2.10.1.tar.gz" \
+  "" \
+  "nil" \
+  "http://download.savannah.gnu.org/releases/freetype/"
+
+download \
+  "fontconfig-2.13.92.tar.gz" \
+  "" \
+  "nil" \
+  "https://www.freedesktop.org/software/fontconfig/release/"
+
+download \
   "harfbuzz-2.6.2.tar.xz" \
   "" \
   "1551bb7ebe970d3466787cd26cfa7f76" \
@@ -218,6 +242,18 @@ download \
   "https://github.com/xiph/speex/archive/"
 
 download \
+  "opencore-amr-0.1.5.tar.gz" \
+  "" \
+  "nil" \
+  "http://downloads.sourceforge.net/project/opencore-amr/opencore-amr/"
+
+download \
+  "SDL2-2.0.10.tar.gz" \
+  "" \
+  "nil" \
+  "http://www.libsdl.org/release/"
+
+download \
   "ffmpeg-4.2.1.tar.gz" \
   "ffmpeg-4.2.1.tar.gz" \
   "dedd54fa07bffa6514491ed141cc4862" \
@@ -304,10 +340,38 @@ autoreconf -fiv
 make -j $jval
 make install
 
+echo "*** Building frei0r ***"
+cd $BUILD_DIR/frei0r*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR"
+make -j $jval
+make install
+
+echo "*** Building gperf ***"
+cd $BUILD_DIR/gperf*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+[ ! -f config.status ] && ./configure --prefix=$TARGET_DIR
+make -j $jval
+make install
+
+echo "*** Building freetype2 without harfbuzz***"
+cd $BUILD_DIR/freetype-2*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+[ ! -f config.status ] && ./configure --prefix=$TARGET_DIR --without-harfbuzz CFLAGS="-fPIC"
+make -j $jval
+make install
+
 echo "*** Building harfbuzz ***"
 cd $BUILD_DIR/harfbuzz-*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
 ./configure --prefix=$TARGET_DIR --disable-shared --enable-static
+make -j $jval
+make install
+
+echo "*** Building fontconfig ***"
+cd $BUILD_DIR/fontconfig*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+[ ! -f config.status ] && ./configure --prefix=$TARGET_DIR --enable-static --disable-docs 
 make -j $jval
 make install
 
@@ -422,6 +486,20 @@ cd $BUILD_DIR/speex*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
 ./autogen.sh
 ./configure --prefix=$TARGET_DIR --disable-shared
+make -j $jval
+make install
+
+echo "*** Building opencore-amr ***"
+cd $BUILD_DIR/opencore-amr*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+[ ! -f config.status ] && ./configure --prefix=$TARGET_DIR --disable-shared
+make -j $jval
+make install
+
+echo "*** Building SDL2 ***"
+cd $BUILD_DIR/SDL2-*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+[ ! -f config.status ] && ./configure --prefix=$TARGET_DIR --disable-shared
 make -j $jval
 make install
 

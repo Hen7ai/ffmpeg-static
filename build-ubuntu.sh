@@ -1,34 +1,29 @@
 #!/bin/bash
 
-sudo apt-get install build-essential curl tar pkg-config tclsh
 sudo apt-get -y --force-yes install \
   autoconf \
   automake \
   build-essential \
   cmake \
-  frei0r-plugins-dev \
+  curl \
   gawk \
-  libass-dev \
-  libfreetype6-dev \
-  libopencore-amrnb-dev \
-  libopencore-amrwb-dev \
-  libsdl1.2-dev \
-  libspeex-dev \
-  libssl-dev \
+  git \
+  libexpat1-dev \
   libtheora-dev \
   libtool \
   libva-dev \
   libvdpau-dev \
   libvo-amrwbenc-dev \
-  libvorbis-dev \
-  libwebp-dev \
   libxcb1-dev \
   libxcb-shm0-dev \
   libxcb-xfixes0-dev \
+  libxext-dev \
   libxvidcore-dev \
+  lsb-release \
   pkg-config \
-  texi2html \
-  zlib1g-dev
+  tar \
+  tclsh \
+  texi2html
 
 # For 12.04
 # libx265 requires cmake version >= 2.8.8
