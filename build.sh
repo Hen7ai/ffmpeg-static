@@ -329,6 +329,9 @@ echo "*** Building srt ***"
 cd $BUILD_DIR/srt*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
 PKG_CONFIG_PATH="$TARGET_DIR/lib/pkgconfig" ./configure --prefix="$TARGET_DIR" --disable-shared
+while [ "$(cat srt.pc | grep lgcc_s)" ]; do
+  sed -i "s/-lgcc_s/-lgcc_eh/g" srt.pc
+done
 make -j $jval
 make install
 
